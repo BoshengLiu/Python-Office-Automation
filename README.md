@@ -6,7 +6,7 @@
 - `src/data_to_file.mp4` - 文件批量处理
 - `src/healing_dog.mp4` - AI内容生成
 
-访问 [index.html](index.html) 查看交互式作品展示页面。
+访问 [Python-Office-Automation](https://boshengliu.github.io/Python-Office-Automation/) 查看交互式作品展示页面。
 
 ## 💼 服务范围
 
