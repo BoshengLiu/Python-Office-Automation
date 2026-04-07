@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>办公自动化与AI智能定制 | Python脚本开发</title>
+    <style>
+        /* --- 全局样式重置 --- */
+        :root {
+            --bg-color: #0f172a;       /* 深蓝黑背景 */
+            --card-bg: #1e293b;        /* 卡片背景 */
+            --text-main: #f1f5f9;      /* 主文字 */
+            --text-sub: #94a3b8;       /* 副文字 */
+            --accent: #38bdf8;         /* 科技蓝高亮 */
+            --accent-hover: #0ea5e9;   /* 悬停色 */
+            --border: #334155;         /* 边框色 */
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+        }
+        a { text-decoration: none; color: inherit; }
+        ul { list-style: none; }
+
+        /* --- 通用工具类 --- */
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .btn-primary { background-color: var(--accent); color: #0f172a; }
+        .btn-primary:hover { background-color: var(--accent-hover); transform: translateY(-2px); }
+        .btn-outline { border: 1px solid var(--accent); color: var(--accent); margin-left: 10px; }
+        .btn-outline:hover { background-color: rgba(56, 189, 248, 0.1); }
+        .section-title {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 10px;
+            background: linear-gradient(to right, #38bdf8, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .section-subtitle { text-align: center; color: var(--text-sub); margin-bottom: 50px; }
+
+        /* --- 首屏 Hero --- */
+        header {
+            padding: 100px 0 80px;
+            text-align: center;
+            background: radial-gradient(circle at center, #1e293b 0%, #0f172a 70%);
+        }
+        header h1 { font-size: 3rem; margin-bottom: 20px; letter-spacing: -1px; }
+        header p { font-size: 1.2rem; color: var(--text-sub); max-width: 600px; margin: 0 auto 40px; }
+
+        /* --- 基础版能力 --- */
+        .basic-section { padding: 60px 0; background-color: #0b1120; }
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        .feature-card {
+            background-color: var(--card-bg);
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            transition: transform 0.3s;
+        }
+        .feature-card:hover { transform: translateY(-5px); border-color: var(--accent); }
+        .feature-icon { font-size: 2rem; margin-bottom: 15px; display: block; }
+        .feature-card h3 { margin-bottom: 15px; color: var(--accent); }
+        .feature-list li { margin-bottom: 10px; color: var(--text-sub); position: relative; padding-left: 20px; }
+        .feature-list li::before { content: "•"; color: var(--accent); position: absolute; left: 0; }
+
+        /* --- 进阶版四大领域 --- */
+        .advanced-section { padding: 80px 0; }
+        .advanced-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 40px;
+        }
+        .domain-card {
+            display: flex;
+            gap: 20px;
+            padding: 30px;
+            background: var(--card-bg);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+        .domain-icon {
+            min-width: 60px;
+            height: 60px;
+            background: rgba(56, 189, 248, 0.1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--accent);
+        }
+        .domain-content h3 { margin-bottom: 10px; font-size: 1.25rem; }
+        .domain-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 15px; }
+        .tag { font-size: 0.8rem; padding: 4px 10px; background: #334155; border-radius: 4px; color: #cbd5e1; }
+
+        /* --- 技术栈 --- */
+        .tech-section { padding: 60px 0; background-color: #0b1120; text-align: center; }
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        .tech-item {
+            font-family: 'Consolas', monospace;
+            padding: 10px 20px;
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 6px;
+            color: #a5b4fc;
+        }
+
+        /* --- 底部联系 --- */
+        footer { padding: 80px 0; text-align: center; border-top: 1px solid var(--border); }
+        .contact-box { margin-top: 30px; padding: 30px; background: var(--card-bg); border-radius: 12px; display: inline-block; }
+        .wechat-id { font-size: 1.5rem; font-weight: bold; color: var(--accent); margin: 10px 0; letter-spacing: 1px; }
+        .disclaimer { margin-top: 40px; font-size: 0.8rem; color: #64748b; }
+
+        /* --- 响应式 --- */
+        @media (max-width: 768px) {
+            header h1 { font-size: 2rem; }
+            .advanced-grid { grid-template-columns: 1fr; }
+            .domain-card { flex-direction: column; }
+        }
+        /* --- 视频预览 --- */
+        .video-section { padding: 80px 0; background-color: #0b1120; text-align: center; }
+        .video-wrapper {
+            max-width: 1100px;
+            margin: 30px auto;
+            display: flex;
+            gap: 20px;
+            background: var(--card-bg);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            padding: 20px;
+        }
+        .video-main {
+            flex: 3;
+            min-width: 0;
+        }
+        .video-list-container {
+            flex: 1;
+            background: rgba(15, 23, 42, 0.5);
+            border-radius: 8px;
+            padding: 15px;
+            text-align: left;
+            overflow-y: auto;
+            max-height: 500px;
+        }
+        .video-list-title {
+            font-size: 1rem;
+            margin-bottom: 15px;
+            color: var(--accent);
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 8px;
+        }
+        .video-item {
+            padding: 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 8px;
+            background: #1e293b;
+            border: 1px solid transparent;
+            font-size: 0.9rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .video-item:hover {
+            background: #334155;
+            border-color: var(--accent);
+        }
+        .video-item.active {
+            background: rgba(56, 189, 248, 0.1);
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+        video {
+            width: 100%;
+            border-radius: 8px;
+            display: block; /* 始终显示 */
+            background: #000;
+        }
+        .video-placeholder {
+            padding: 60px 20px;
+            color: var(--text-sub);
+            border: 2px dashed var(--border);
+            border-radius: 8px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 首屏 -->
+    <header>
+        <div class="container">
+            <h1>重塑办公效率，定义智能工作流</h1>
+            <p>从Python自动化脚本到AI智能体搭建，为您提供一站式技术解决方案。告别重复劳动，让技术为您工作。</p>
+            <a href="#contact" class="btn btn-primary">获取定制方案</a>
+            <a href="#advanced" class="btn btn-outline">查看高阶能力</a>
+        </div>
+    </header>
+
+    <!-- 基础版能力 -->
+    <section class="basic-section">
+        <div class="container">
+            <h2 class="section-title">基础版：办公效率倍增器</h2>
+            <p class="section-subtitle">解决日常90%的重复性机械操作</p>
+
+            <div class="feature-grid">
+                <!-- 卡片1 -->
+                <div class="feature-card">
+                    <span class="feature-icon">📂</span>
+                    <h3>文件批量管家</h3>
+                    <ul class="feature-list">
+                        <li>自定义规则重命名（加前缀/后缀）</li>
+                        <li>文件夹自动归档与同步</li>
+                        <li>MD5查重比对，精准去重</li>
+                        <li>批量创建文件夹/文档结构</li>
+                    </ul>
+                </div>
+                <!-- 卡片2 -->
+                <div class="feature-card">
+                    <span class="feature-icon">🖼️</span>
+                    <h3>图片与PDF流水线</h3>
+                    <ul class="feature-list">
+                        <li>文件名一键印图/水印</li>
+                        <li>扫描件敏感信息智能遮挡</li>
+                        <li>图片与PDF互转、批量裁剪</li>
+                        <li>PDF指定页码提取/合并</li>
+                    </ul>
+                </div>
+                <!-- 卡片3 -->
+                <div class="feature-card">
+                    <span class="feature-icon">📊</span>
+                    <h3>Excel基础清洗</h3>
+                    <ul class="feature-list">
+                        <li>格式转换 (xls转xlsx)</li>
+                        <li>批量内容替换、拆分合并</li>
+                        <li>科学记数法修约、时间差计算</li>
+                        <li>数据提取与基础清洗</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 进阶版能力 -->
+    <section id="advanced" class="advanced-section">
+        <div class="container">
+            <h2 class="section-title">进阶版：四大核心技术领域</h2>
+            <p class="section-subtitle">解决复杂逻辑、数据分析与AI创作需求</p>
+
+            <div class="advanced-grid">
+                <!-- 领域1 -->
+                <div class="domain-card">
+                    <div class="domain-icon">📈</div>
+                    <div class="domain-content">
+                        <h3>高阶数据自动化</h3>
+                        <p style="color:var(--text-sub); font-size: 0.9rem;">基于Pandas深度处理，解决复杂数据逻辑。</p>
+                        <div class="domain-tags">
+                            <span class="tag">跨表/跨文件比对</span>
+                            <span class="tag">银行流水稽核</span>
+                            <span class="tag">自动化图表报告</span>
+                            <span class="tag">OCR票据识别</span>
+                            <span class="tag">PDF转Excel</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 领域2 -->
+                <div class="domain-card">
+                    <div class="domain-icon">🕸️</div>
+                    <div class="domain-content">
+                        <h3>RPA与数据采集</h3>
+                        <p style="color:var(--text-sub); font-size: 0.9rem;">模拟人工操作浏览器，打破数据孤岛。</p>
+                        <div class="domain-tags">
+                            <span class="tag">网页自动填报</span>
+                            <span class="tag">模拟点击/登录</span>
+                            <span class="tag">公开数据抓取</span>
+                            <span class="tag">批量下载资料</span>
+                            <span class="tag">批量数据写入系统</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 领域3 -->
+                <div class="domain-card">
+                    <div class="domain-icon">🎨</div>
+                    <div class="domain-content">
+                        <h3>AIGC视觉设计（开启中）</h3>
+                        <p style="color:var(--text-sub); font-size: 0.9rem;">ComfyUI工作流搭建，低成本高质量素材生产。</p>
+                        <div class="domain-tags">
+                            <span class="tag">ComfyUI工作流</span>
+                            <span class="tag">Lora模型定制</span>
+                            <span class="tag">批量文生图</span>
+                            <span class="tag">电商素材生成</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 领域4 -->
+                <div class="domain-card">
+                    <div class="domain-icon">🧠</div>
+                    <div class="domain-content">
+                        <h3>AI智能体与工作流</h3>
+                        <p style="color:var(--text-sub); font-size: 0.9rem;">智能体应用落地，技术指导。</p>
+                        <div class="domain-tags">
+                            <span class="tag">Coze智能体搭建</span>
+                            <span class="tag">Dify工作流编排</span>
+                            <span class="tag">Python开发</span>
+                            <span class="tag">GitHub部署与指导</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 技术栈 -->
+    <section class="tech-section">
+        <div class="container">
+            <h2 class="section-title">基于强大的开源生态</h2>
+            <p class="section-subtitle">拒绝黑盒，提供可维护的开源方案</p>
+            <div class="tech-stack">
+                <span class="tech-item">Python 3.x</span>
+                <span class="tech-item">Pandas & NumPy & Pyecharts &matplotlib</span>
+                <span class="tech-item">Selenium / Playwright</span>
+                <span class="tech-item">OpenCV & Paddle OCR</span>
+                <span class="tech-item">PyPDF2 & docx & MinerU &Marker</span>
+                <span class="tech-item">ComfyUI & Stable Diffusion & Lora</span>
+                <span class="tech-item">LangChain & LangGraph & Agent &Coze & Dify</span>
+                <span class="tech-item">NLP & prompt & RAG</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- 视频预览 -->
+    <section class="video-section" id="video-preview">
+        <div class="container">
+            <h2 class="section-title">成果展示</h2>
+            <p class="section-subtitle">点击右侧列表，快速预览各类自动化脚本运行实录</p>
+            
+            <div class="video-wrapper">
+                <!-- 主播放器 -->
+                <div class="video-main">
+                    <video id="videoPlayer" controls autoplay muted></video>
+                    <div id="videoPlaceholder" class="video-placeholder" style="display: none;">
+                        <span style="font-size: 3rem; display: block; margin-bottom: 10px;">🎞️</span>
+                        <p>请在右侧选择一个视频开始播放</p>
+                    </div>
+                </div>
+
+                <!-- 侧边列表 -->
+                <div class="video-list-container">
+                    <div class="video-list-title">视频资源列表</div>
+                    <div id="videoList" class="video-list">
+                        <!-- JS 动态注入 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 底部联系 -->
+    <footer id="contact">
+        <div class="container">
+            <h2 class="section-title">准备好提升效率了吗？</h2>
+            <p class="section-subtitle">无论是繁琐的表格比对，还是前沿的 AI 智能体搭建</p>
+
+            <div class="contact-box">
+                <p>点击复制微信号，备注"自动化咨询"</p>
+                <div class="wechat-id">BossenLau</div>
+                <div style="display: flex; gap: 15px; justify-content: center; align-items: center; margin-top: 15px;">
+                    <button onclick="copyWechat()" class="btn btn-primary">复制微信号</button>
+                    <button onclick="toggleQRCode()" class="btn btn-outline" style="margin-left: 0;">微信扫一扫</button>
+                </div>
+                <div id="qrcodeContainer" style="display: none; margin-top: 20px; padding: 15px; background: #fff; border-radius: 8px;">
+                    <img src="src/wechat_qr.jpg" alt="微信二维码" style="max-width: 250px; height: auto; display: block; margin: 0 auto;">
+                    <p style="color: #333; margin-top: 10px; font-size: 0.9rem;">扫描二维码添加微信</p>
+                </div>
+            </div>
+
+            <div class="disclaimer">
+                <p>© 2026 办公自动化定制服务。保留所有权利。</p>
+                <p>服务范围说明：本人致力于提供合法合规的技术服务，拒绝开发涉及网络攻击、恶意爬虫及违反法律法规的脚本。</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function copyWechat() {
+            const wechatId = 'BossenLau';
+            navigator.clipboard.writeText(wechatId).then(() => {
+                alert('微信号已复制');
+            }).catch(err => {
+                // 降级方案
+                const textArea = document.createElement('textarea');
+                textArea.value = wechatId;
+                textArea.style.position = 'fixed';
+                textArea.style.left = '-999999px';
+                document.body.appendChild(textArea);
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    alert('微信号已复制');
+                } catch (e) {
+                    alert('复制失败，请手动复制');
+                }
+                document.body.removeChild(textArea);
+            });
+        }
+
+        function toggleQRCode() {
+            const qrcodeContainer = document.getElementById('qrcodeContainer');
+            qrcodeContainer.style.display = qrcodeContainer.style.display === 'none' ? 'block' : 'none';
+        }
+
+        // --- 视频列表配置 ---
+        const videos = [
+            'src/ocr_extract_cpu.mp4',
+            'src/data_to_plot.mp4',
+            'src/data_to_file.mp4',
+            'src/healing_dog.mp4'
+        ];
+
+        const videoPlayer = document.getElementById('videoPlayer');
+        const videoList = document.getElementById('videoList');
+        const videoPlaceholder = document.getElementById('videoPlaceholder');
+
+        // 初始化视频列表
+        function initVideoList() {
+            if (videos.length === 0) {
+                videoPlayer.style.display = 'none';
+                videoPlaceholder.style.display = 'block';
+                return;
+            }
+
+            videos.forEach((filepath, index) => {
+                const item = document.createElement('div');
+                item.className = 'video-item';
+                if (index === 0) item.classList.add('active');
+
+                // 提取文件名(去掉路径)
+                const filename = filepath.split('/').pop().split('\\').pop();
+                item.textContent = filename;
+                item.title = filename;
+                
+                // 存储完整路径用于播放
+                item.dataset.path = filepath;
+
+                item.onclick = () => playVideo(filepath, item);
+                videoList.appendChild(item);
+            });
+
+            // 默认播放第一个
+            playVideo(videos[0], videoList.querySelector('.video-item'));
+        }
+
+        function playVideo(filepath, element) {
+            // 更新 UI 状态
+            document.querySelectorAll('.video-item').forEach(el => el.classList.remove('active'));
+            element.classList.add('active');
+
+            // 切换视频源
+            videoPlayer.src = filepath;
+            videoPlayer.load(); // 重新加载视频源
+            
+            // 尝试播放
+            const playPromise = videoPlayer.play();
+            if (playPromise !== undefined) {
+                playPromise.catch(error => {
+                    console.log("自动播放可能被浏览器阻止:", error);
+                });
+            }
+        }
+
+        // 页面加载后初始化
+        window.addEventListener('DOMContentLoaded', initVideoList);
+    </script>
+
+</body>
+</html>
